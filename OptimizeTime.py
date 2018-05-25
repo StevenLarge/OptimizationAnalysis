@@ -67,6 +67,19 @@ def CostFunction(TimeVals, CPIndex, TimeArray, CorrelationTuple):
 	return Func
 
 
+def FullCostFunction(TimeVals, CPIndex, TimeArray, CorrelationTuple):
+
+	Func = 0
+
+	for index in range(len(TimeVals)):
+
+		TimeIndex = FindIndex(TimeArray,TimeVals[index])
+		Slope = 0.5*10*(CorrelationTuple[CPIndex[index]][TimeIndex+1] - CorrelationTuple[CPIndex[index]][TimeIndex-1])
+		Func = Func + 0.5*CorrelationTuple[CPIndex[index]][0] + (CorrelationTuple[CPIndex[index]][TimeIndex] + Slope*(TimeVals[index] - TimeArray[TimeIndex]))
+
+	return Func
+
+
 def CorrelationTuple(CorrelationArray):
 
 	HalfTuple = []
