@@ -213,19 +213,19 @@ sns.set(style='darkgrid',palette='muted',color_codes=True)
 
 fig,ax = plt.subplots(1,4,sharex=True,sharey=True)
 #ax[0].plot(CumulTimes_N1,CPVals_N1[0:len(CPVals_N1)-1],'r--',linewidth=2.5,alpha=0.5)
-ax[0].plot(CPTime_N1,CPTraj_N1,'r--',linewidth=2.5,alpha=0.5)
+ax[0].plot(CPTime_N1,CPTraj_N1,'r',linewidth=2.0,alpha=0.5)
 ax[0].plot(CumulTimes_N1,CPVals_N1[0:len(CPVals_N1)-1],'ro')
 
 #ax[1].plot(CumulTimes_N2,CPVals_N2[0:len(CPVals_N2)-1],'r--',linewidth=2.5,alpha=0.5)
-ax[1].plot(CPTime_N2,CPTraj_N2,'r--',linewidth=2.5,alpha=0.5)
+ax[1].plot(CPTime_N2,CPTraj_N2,'r',linewidth=2.0,alpha=0.5)
 ax[1].plot(CumulTimes_N2,CPVals_N2[0:len(CPVals_N2)-1],'ro')
 
 #ax[2].plot(CumulTimes_N3,CPVals_N3[0:len(CPVals_N3)-1],'r--',linewidth=2.5,alpha=0.5)
-ax[2].plot(CPTime_N3,CPTraj_N3,'r--',linewidth=2.5,alpha=0.5)
+ax[2].plot(CPTime_N3,CPTraj_N3,'r',linewidth=2.0,alpha=0.5)
 ax[2].plot(CumulTimes_N3,CPVals_N3[0:len(CPVals_N3)-1],'ro')
 
 #ax[3].plot(CumulTimes_N4,CPVals_N4[0:len(CPVals_N4)-1],'r--',linewidth=2.5,alpha=0.5)
-ax[3].plot(CPTime_N4,CPTraj_N4,'r--',linewidth=2.5,alpha=0.5)
+ax[3].plot(CPTime_N4,CPTraj_N4,'r',linewidth=2.0,alpha=0.5)
 ax[3].plot(CumulTimes_N4,CPVals_N4[0:len(CPVals_N4)-1],'ro')
 
 ax[0].set_xlabel(r"Accumulated Time $t^*$",fontsize=17)
@@ -236,19 +236,19 @@ plt.close()
 
 fig,ax = plt.subplots(1,4,sharex=True,sharey=True)
 #ax[0].plot(CumulTimes_T1,CPVals_T1[0:len(CPVals_T1)-1],'b--',linewidth=2.5,alpha=0.5)
-ax[0].plot(CPTime_T1,CPTraj_T1,'b--',linewidth=2.5,alpha=0.5)
+ax[0].plot(CPTime_T1,CPTraj_T1,'b',linewidth=2.0,alpha=0.5)
 ax[0].plot(CumulTimes_T1,CPVals_T1[0:len(CPVals_T1)-1],'bo')
 
 #ax[1].plot(CumulTimes_T2,CPVals_T2[0:len(CPVals_T2)-1],'b--',linewidth=2.5,alpha=0.5)
-ax[1].plot(CPTime_T2,CPTraj_T2,'b--',linewidth=2.5,alpha=0.5)
+ax[1].plot(CPTime_T2,CPTraj_T2,'b',linewidth=2.0,alpha=0.5)
 ax[1].plot(CumulTimes_T2,CPVals_T2[0:len(CPVals_T2)-1],'bo')
 
 #ax[2].plot(CumulTimes_T3,CPVals_T3[0:len(CPVals_T3)-1],'b--',linewidth=2.5,alpha=0.5)
-ax[2].plot(CPTime_T3,CPTraj_T3,'b--',linewidth=2.5,alpha=0.5)
+ax[2].plot(CPTime_T3,CPTraj_T3,'b',linewidth=2.0,alpha=0.5)
 ax[2].plot(CumulTimes_T3,CPVals_T3[0:len(CPVals_T3)-1],'bo')
 
 #ax[3].plot(CumulTimes_T4,CPVals_T4[0:len(CPVals_T4)-1],'b--',linewidth=2.5,alpha=0.5)
-ax[3].plot(CPTime_T4,CPTraj_T4,'b--',linewidth=2.5,alpha=0.5)
+ax[3].plot(CPTime_T4,CPTraj_T4,'b',linewidth=2.0,alpha=0.5)
 ax[3].plot(CumulTimes_T4,CPVals_T4[0:len(CPVals_T4)-1],'bo')
 
 ax[0].set_xlabel(r"Accumulated Time $t^*$",fontsize=17)
@@ -261,19 +261,19 @@ plt.close()
 
 fig,ax = plt.subplots(1,4,sharex=True,sharey=True)
 #ax[0].plot(CumulTimes_S1,CPVals_S1[0:len(CPVals_S1)-1],'g--',linewidth=2.5,alpha=0.5)
-ax[0].plot(CPTime_S1,CPTraj_S1,'g--',linewidth=2.5,alpha=0.5)
+ax[0].plot(CPTime_S1,CPTraj_S1,'g',linewidth=2.0,alpha=0.5)
 ax[0].plot(CumulTimes_S1,CPVals_S1[0:len(CPVals_S1)-1],'go')
 
 #ax[1].plot(CumulTimes_S2,CPVals_S2[0:len(CPVals_S2)-1],'g--',linewidth=2.5,alpha=0.5)
-ax[1].plot(CPTime_S2,CPTraj_S2,'g--',linewidth=2.5,alpha=0.5)
+ax[1].plot(CPTime_S2,CPTraj_S2,'g',linewidth=2.0,alpha=0.5)
 ax[1].plot(CumulTimes_S2,CPVals_S2[0:len(CPVals_S2)-1],'go')
 
 #ax[2].plot(CumulTimes_S3,CPVals_S3[0:len(CPVals_S3)-1],'g--',linewidth=2.5,alpha=0.5)
-ax[2].plot(CPTime_S3,CPTraj_S3,'g--',linewidth=2.5,alpha=0.5)
+ax[2].plot(CPTime_S3,CPTraj_S3,'g',linewidth=2.0,alpha=0.5)
 ax[2].plot(CumulTimes_S3,CPVals_S3[0:len(CPVals_S3)-1],'go')
 
 #ax[3].plot(CumulTimes_S4,CPVals_S4[0:len(CPVals_S4)-1],'g--',linewidth=2.5,alpha=0.5)
-ax[3].plot(CPTime_S4,CPTraj_S4,'g--',linewidth=2.5,alpha=0.5)
+ax[3].plot(CPTime_S4,CPTraj_S4,'g',linewidth=2.0,alpha=0.5)
 ax[3].plot(CumulTimes_S4,CPVals_S4[0:len(CPVals_S4)-1],'go')
 
 ax[0].set_xlabel(r"Accumulated Time $t^*$",fontsize=17)
