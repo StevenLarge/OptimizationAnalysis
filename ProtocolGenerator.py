@@ -78,7 +78,7 @@ def GenerateSpaceOptProtocol(NumCPVals,TotalTime):
 		CPVals.append(CurrCP)
 		CurrCP = CurrCP + OptCPVals[index]
 
-	CPVals.append(OptCPVals[-1])
+	CPVals.append(1)
 
 	return CPVals,NaiveTime
 
