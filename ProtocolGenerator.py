@@ -114,21 +114,21 @@ def GenerateTrajectory(CPVals,CumulTimes):
 
 
 
-CPVals_N1,Times_N1 = GenerateNaiveProtocol(5,100)
-CPVals_N2,Times_N2 = GenerateNaiveProtocol(10,100)
-CPVals_N3,Times_N3 = GenerateNaiveProtocol(20,100)
-CPVals_N4,Times_N4 = GenerateNaiveProtocol(40,100)
+CPVals_N1,Times_N1 = GenerateNaiveProtocol(5,1000)
+CPVals_N2,Times_N2 = GenerateNaiveProtocol(11,1000)
+CPVals_N3,Times_N3 = GenerateNaiveProtocol(21,1000)
+CPVals_N4,Times_N4 = GenerateNaiveProtocol(41,1000)
 
-CPVals_T1,Times_T1 = GenerateTimeOptProtocol(5,100)
-CPVals_T2,Times_T2 = GenerateTimeOptProtocol(10,100)
-CPVals_T3,Times_T3 = GenerateTimeOptProtocol(20,100)
-CPVals_T4,Times_T4 = GenerateTimeOptProtocol(40,100)
+CPVals_T1,Times_T1 = GenerateTimeOptProtocol(5,1000)
+CPVals_T2,Times_T2 = GenerateTimeOptProtocol(11,1000)
+CPVals_T3,Times_T3 = GenerateTimeOptProtocol(21,1000)
+CPVals_T4,Times_T4 = GenerateTimeOptProtocol(41,1000)
 
 
-CPVals_S1,Times_S1 = GenerateSpaceOptProtocol(5,100)
-CPVals_S2,Times_S2 = GenerateSpaceOptProtocol(10,100)
-CPVals_S3,Times_S3 = GenerateSpaceOptProtocol(20,100)
-CPVals_S4,Times_S4 = GenerateSpaceOptProtocol(40,100)
+CPVals_S1,Times_S1 = GenerateSpaceOptProtocol(5,1000)
+CPVals_S2,Times_S2 = GenerateSpaceOptProtocol(11,1000)
+CPVals_S3,Times_S3 = GenerateSpaceOptProtocol(21,1000)
+CPVals_S4,Times_S4 = GenerateSpaceOptProtocol(41,1000)
 
 CumulTimes_N1 = []
 CumulTimes_N2 = []
