@@ -11,6 +11,7 @@ import seaborn as sns
 
 import OptimizeTime as OptTime
 import OptimizeSpace as OptSpace
+import OptimizeFull as FullOpt
 
 def GenerateNaiveProtocol(NumCPVals,TotalTime):
 
@@ -112,7 +113,7 @@ def GenerateTrajectory(CPVals,CumulTimes):
 	return CPTraj,TimeRange
 
 
-
+#Generate protocols of each class for comparison
 
 CPVals_N1,Times_N1 = GenerateNaiveProtocol(5,1000)
 CPVals_N2,Times_N2 = GenerateNaiveProtocol(11,1000)
@@ -123,7 +124,6 @@ CPVals_T1,Times_T1 = GenerateTimeOptProtocol(5,1000)
 CPVals_T2,Times_T2 = GenerateTimeOptProtocol(11,1000)
 CPVals_T3,Times_T3 = GenerateTimeOptProtocol(21,1000)
 CPVals_T4,Times_T4 = GenerateTimeOptProtocol(41,1000)
-
 
 CPVals_S1,Times_S1 = GenerateSpaceOptProtocol(5,1000)
 CPVals_S2,Times_S2 = GenerateSpaceOptProtocol(11,1000)
