@@ -147,6 +147,50 @@ def CostFunction(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, Correlat
 	return TotalCost
 
 
+def CostFunction_Total(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, CorrelationTuple):
+
+	TimeVals = InputTuple[0:NumTimeAlloc]
+	CPDiffVals = InputTuple[NumTimeAlloc:len(InputTuple)]
+
+	TempCPVals = [CPStart]
+	CPCounter = CPStart
+
+	dX = 0.005
+	dT = 0.1
+
+	for index in range(len(CPDiffVals)):
+		CPCounter = CPCounter + CPDiffVals[index]
+		TempCPVals.append(CPCounter)
+
+	BoundaryCost = CPDiffVals[0]*CPDiffVals[0]*CorrelationTuple[0][0]
+	TemporalCost = 0
+	SpatialCost = 0
+
+	for index in range(len(CPDiffVals)-1):
+
+		TimeIndex = FindIndex(TimeArray,TimeVals[index])
+		CPIndex = FindIndex(CPArray,TempCPVals[index+1])
+
+		if(CPIndex < len(CPArray) & CPIndex > 0):
+			SlopeSpaceZero = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex-1][0])
+			SlopeSpace = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][TimeIndex] - CorrelationTuple[CPIndex-1][TimeIndex])
+		elif(CPIndex+1 < len(CPArray)):	
+			SlopeSpaceZero = (float(1)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex][0])
+			SlopeSpace = (float(1)/dX)*(CorrelationTuple[CPIndex+1][TimeIndex] - CorrelationTuple[CPIndex][TimeIndex])
+		else:
+			SpaceSlopeZero = (float(1)/dX)*(CorrelationTuple[CPIndex][0] - CorrelationTuple[CPIndex-1][0])
+			SpaceSlope = (float(1)/dX)*(CorrelationTuple[CPIndex][TimeIndex] - CorrelationTuple[CPIndex-1][TimeIndex])
+
+		TimeSlope = (float(1)/dT)*(CorrelationTuple[CPIndex][TimeIndex+1] - CorrelationTuple[CPIndex][TimeIndex])
+
+		TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex]) + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
+		SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPindex][0] + SpaceSlopeZero*(TempCPVals[index+1] - CPArray[CPIndex]))
+
+	TotalCost = BoundaryCost + SpatialCost + TemporalCost
+
+	return TotalCost
+
+
 def TemporalCostFunction(TimeVals, CPIndex, TimeArray, CorrelationTuple):
 
 	Func = 0

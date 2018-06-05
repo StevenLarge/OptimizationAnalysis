@@ -126,13 +126,13 @@ def CostFunction_Revised(CPDiffVals, CPStart, TimeIndex, CPArray, CorrelationTup
 		
 		if(CPIndex < len(CPArray) & CPIndex > 0):
 			SlopeSpace = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex-1][0])
-			SlopeTime = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex-1][0])
+			SlopeTime = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][TimeIndex] - CorrelationTuple[CPIndex-1][TimeIndex])
 		elif(CPIndex+1 < len(CPArray)):	
 			SlopeSpace = (float(1)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex][0])
-			SlopeTime = (float(1)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex][0])
+			SlopeTime = (float(1)/dX)*(CorrelationTuple[CPIndex+1][TimeIndex] - CorrelationTuple[CPIndex][TimeIndex])
 		else:
 			SlopeSpace = (float(1)/dX)*(CorrelationTuple[CPIndex][0] - CorrelationTuple[CPIndex-1][0])
-			SlopeTime = (float(1)/dX)*(CorrelationTuple[CPIndex][0] - CorrelationTuple[CPIndex-1][0])
+			SlopeTime = (float(1)/dX)*(CorrelationTuple[CPIndex][TimeIndex] - CorrelationTuple[CPIndex-1][TimeIndex])
 
 		#SlopeSpace = float(0.0)
 		TimeCost = CPDiffVals[index+1]*CPDiffVals[index]*(CorrelationTuple[CPIndex][TimeIndex] + SlopeTime*(TempCPVals[index+1] - CPArray[CPIndex]))
