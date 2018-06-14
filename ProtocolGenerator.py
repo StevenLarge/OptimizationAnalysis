@@ -115,6 +115,11 @@ def GenerateTrajectory(CPVals,CumulTimes):
 
 #Generate protocols of each class for comparison
 
+CPVals_F1,Times_F1 = GenerateFullOptimalProtocol(5,1000)
+CPVals_F2,Times_F2 = GenerateFullOptimalProtocol(11,1000)
+CPVals_F3,Times_F3 = GenerateFullOptimalProtocol(21,1000)
+CPVals_F4,Times_F4 = GenerateFullOptimalProtocol(41,1000)
+
 CPVals_N1,Times_N1 = GenerateNaiveProtocol(5,1000)
 CPVals_N2,Times_N2 = GenerateNaiveProtocol(11,1000)
 CPVals_N3,Times_N3 = GenerateNaiveProtocol(21,1000)

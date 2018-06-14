@@ -385,6 +385,20 @@ def Driver_PreRead_Brute(Iterations,NumCPVals,TotalTime,CPVals,LagTime,Correlati
 
 
 
+def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteControl/LinkedCode_CPP/Equilibrium_FromCluster/CorrelationMesh_9_15/",
+		   Filename_CorrArray="CorrelationMesh_2.dat",
+		   Filename_CP="CPVals_2.dat",
+		   Filename_LagTime="LagTime_2.dat"):
+
+	CPVals = ReadVector(ReadPath,Filename_CP)
+	LagTime = ReadVector(ReadPath,Filename_LagTime)
+	CorrelationMesh = ReadCorrelationArray(ReadPath,Filename_CorrArray)
+
+	OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime = Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh)
+
+	return OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime
+
+
 def Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh): 			
 	
 	#CPMin = CPVals[0]
@@ -456,7 +470,7 @@ def Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh):
 
 	#OBJECTIVE FUNCTION MUST RETURN A SCALAR ERROR
 
-	OptimalResult = scipy.optimize.minimize(CostFunction, Input_Tuple, args=Parameter_Tuple, method="SLSQP", bounds=Bnds, constraints=Cons)
+	OptimalResult = scipy.optimize.minimize(CostFunction_Total, Input_Tuple, args=Parameter_Tuple, method="SLSQP", bounds=Bnds, constraints=Cons)
 
 	#OptimalResult = 1
 
