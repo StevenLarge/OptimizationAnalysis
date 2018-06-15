@@ -184,7 +184,7 @@ def CostFunction_Total(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, Co
 
 		TimeSlope = (float(1)/dT)*(CorrelationTuple[CPIndex][TimeIndex+1] - CorrelationTuple[CPIndex][TimeIndex])
 
-		TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex])) # + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
+		TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex]) + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
 		SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(TempCPVals[index+1] - CPArray[CPIndex]))
 
 	TotalCost = BoundaryCost + SpatialCost + TemporalCost
@@ -386,7 +386,7 @@ def Driver_PreRead_Brute(Iterations,NumCPVals,TotalTime,CPVals,LagTime,Correlati
 
 
 
-def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteControl/LinkedCode_CPP/Equilibrium_FromCluster/CorrelationMesh_9_15/",
+def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteControl/LinkedCode_CPP/Equilibrium_FromCluster/CorrelationMesh_15_15/",
 		   Filename_CorrArray="CorrelationMesh_2.dat",
 		   Filename_CP="CPVals_2.dat",
 		   Filename_LagTime="LagTime_2.dat"):
@@ -397,13 +397,13 @@ def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteCont
 
 	OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime = Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh)
 
-	plt.plot(OptimalResultSpace)
-	plt.show()
-	plt.close()
+	#plt.plot(OptimalResultSpace)
+	#plt.show()
+	#plt.close()
 
-	plt.plot(OptimalResultTime)
-	plt.show()
-	plt.close()
+	#plt.plot(OptimalResultTime)
+	#plt.show()
+	#plt.close()
 
 	return OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime
 
@@ -478,8 +478,9 @@ def Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh):
 	print "Bounds --> " + str(Bnds) + "\n"
 
 	#OBJECTIVE FUNCTION MUST RETURN A SCALAR ERROR
+	#FIXED, sort of, the optimization does not appear to be optimizing with respect to time
 
-	OptimalResult = scipy.optimize.minimize(CostFunction_Total, Input_Tuple, args=Parameter_Tuple, method="SLSQP", bounds=Bnds, constraints=Cons)
+	OptimalResult = scipy.optimize.minimize(CostFunction_Total, Input_Tuple, args=Parameter_Tuple, method="SLSQP", bounds=Bnds, constraints=Cons, options={'ftol':1e-8})
 
 	#OptimalResult = 1
 
