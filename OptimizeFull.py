@@ -5,6 +5,7 @@
 
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 
 import scipy.optimize
 
@@ -172,19 +173,19 @@ def CostFunction_Total(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, Co
 		CPIndex = FindIndex(CPArray,TempCPVals[index+1])
 
 		if(CPIndex < len(CPArray) & CPIndex > 0):
-			SlopeSpaceZero = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex-1][0])
-			SlopeSpace = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][TimeIndex] - CorrelationTuple[CPIndex-1][TimeIndex])
+			SpaceSlopeZero = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex-1][0])
+			SpaceSlope = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][TimeIndex] - CorrelationTuple[CPIndex-1][TimeIndex])
 		elif(CPIndex+1 < len(CPArray)):	
-			SlopeSpaceZero = (float(1)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex][0])
-			SlopeSpace = (float(1)/dX)*(CorrelationTuple[CPIndex+1][TimeIndex] - CorrelationTuple[CPIndex][TimeIndex])
+			SpaceSlopeZero = (float(1)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex][0])
+			SpaceSlope = (float(1)/dX)*(CorrelationTuple[CPIndex+1][TimeIndex] - CorrelationTuple[CPIndex][TimeIndex])
 		else:
 			SpaceSlopeZero = (float(1)/dX)*(CorrelationTuple[CPIndex][0] - CorrelationTuple[CPIndex-1][0])
 			SpaceSlope = (float(1)/dX)*(CorrelationTuple[CPIndex][TimeIndex] - CorrelationTuple[CPIndex-1][TimeIndex])
 
 		TimeSlope = (float(1)/dT)*(CorrelationTuple[CPIndex][TimeIndex+1] - CorrelationTuple[CPIndex][TimeIndex])
 
-		TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex]) + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
-		SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPindex][0] + SpaceSlopeZero*(TempCPVals[index+1] - CPArray[CPIndex]))
+		TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex])) # + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
+		SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(TempCPVals[index+1] - CPArray[CPIndex]))
 
 	TotalCost = BoundaryCost + SpatialCost + TemporalCost
 
@@ -395,6 +396,14 @@ def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteCont
 	CorrelationMesh = ReadCorrelationArray(ReadPath,Filename_CorrArray)
 
 	OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime = Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh)
+
+	plt.plot(OptimalResultSpace)
+	plt.show()
+	plt.close()
+
+	plt.plot(OptimalResultTime)
+	plt.show()
+	plt.close()
 
 	return OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime
 
