@@ -163,7 +163,8 @@ def CostFunction_Total(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, Co
 		CPCounter = CPCounter + CPDiffVals[index]
 		TempCPVals.append(CPCounter)
 
-	BoundaryCost = CPDiffVals[0]*CPDiffVals[0]*CorrelationTuple[0][0]
+	#BoundaryCost = CPDiffVals[0]*CPDiffVals[0]*CorrelationTuple[0][0]
+	BoundaryCost = 0
 	TemporalCost = 0
 	SpatialCost = 0
 
