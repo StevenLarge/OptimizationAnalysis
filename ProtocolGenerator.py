@@ -84,7 +84,7 @@ def GenerateSpaceOptProtocol(NumCPVals,TotalTime):
 	return CPVals,NaiveTime
 
 
-def GenerateFullOptProtocol(NumCPVals,TotalTime):
+def GenerateFullOptimalProtocol(NumCPVals,TotalTime):
 
 	PaddingTime = 100
 
@@ -234,7 +234,7 @@ for index in range(len(Times_S4)-1):
 	TimeAcc_N += Times_N4[index+1]
 	TimeAcc_T += Times_T4[index+1]
 	TimeAcc_S += Times_S4[index+1]
-	TiemAcc_F += Times_F4[index+1]
+	TimeAcc_F += Times_F4[index+1]
 
 CPTraj_N1,CPTime_N1 = GenerateTrajectory(CPVals_N1,CumulTimes_N1)
 CPTraj_N2,CPTime_N2 = GenerateTrajectory(CPVals_N2,CumulTimes_N2)
@@ -336,7 +336,7 @@ ax[0].plot(CumulTimes_F1,CPVals_F1[0:len(CPVals_F1)-1],'ro')
 ax[1].plot(CPTime_N2,CPTraj_N2,'k--',linewidth=2.0,alpha=0.5)
 ax[1].plot(CPTime_T2,CPTraj_T2,'b--',linewidth=2.0,alpha=0.5)
 ax[1].plot(CPTime_S2,CPTraj_S2,'g--',linewidth=2.0,alpha=0.5)
-ax[1].plot(CpTime_F2,CPTraj_F2,'r--',linewidth=2.0,alpha=0.5)
+ax[1].plot(CPTime_F2,CPTraj_F2,'r--',linewidth=2.0,alpha=0.5)
 
 ax[1].plot(CumulTimes_N2,CPVals_N2[0:len(CPVals_N2)-1],'ko')
 ax[1].plot(CumulTimes_T2,CPVals_T2[0:len(CPVals_T2)-1],'bo')

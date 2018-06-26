@@ -488,7 +488,7 @@ def Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh):
 
 	Bnds = CreateBoundTuple(len(Input_Tuple),TotalCPDist,NumTimeAlloc)
 
-	print "Bounds --> " + str(Bnds) + "\n"
+	#print "Bounds --> " + str(Bnds) + "\n"
 
 	#OBJECTIVE FUNCTION MUST RETURN A SCALAR ERROR
 	#FIXED, sort of, the optimization does not appear to be optimizing with respect to time
@@ -498,8 +498,8 @@ def Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh):
 	OptimalResult_Time = OptimalResult.x[0:NumTimeAlloc]
 	OptimalResult_Space = OptimalResult.x[NumTimeAlloc:len(OptimalResult.x)]
 
-	print "\n\t\tOptimalTimes --> \t" + str(OptimalResult_Time)
-	print "\n\t\tOptimal Diff --> \t" + str(OptimalResult_Space) + "\n\n"
+	#print "\n\t\tOptimalTimes --> \t" + str(OptimalResult_Time)
+	#print "\n\t\tOptimal Diff --> \t" + str(OptimalResult_Space) + "\n\n"
 
 	return OptimalResult, OptimalResult_Space, OptimalResult_Time, NaiveCPAlloc, TimeAlloc
 
