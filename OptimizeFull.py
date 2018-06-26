@@ -85,6 +85,43 @@ def SpatialCostFunction(CPDiffVals, CPStart, TimeIndexArray, CPArray, Correlatio
 	return Func
 
 
+def SpatialCostFunction_Revised(CPDiffVals,CPStart,TimeIndexArray,CPArray,CorrelationTuple):
+
+	TempCPVals = [CPStart]
+	CPCounter = CPStart
+
+	SpatialCost = 0
+
+	dX = 0.005
+
+	for index in range(len(CPDiffVals)): 										#Reconstruct the CP values from the starting point and the sequence of differences
+		CPCounter = CPCounter + CPDiffVals[index]
+		TempCPVals.append(CPCounter)
+
+	BoundaryCost = 0.5*CPDiffVals[0]*CPDiffVals[0]*CorrelationTuple[0][0]
+
+	for index in range(len(CPDiffVals)-1):
+		
+		CPIndex = FindIndex(CPArray,TempCPVals[index+1])
+		
+		if(CPIndex < len(CPArray) & CPIndex > 0):
+			SlopeSpace = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex-1][0])
+			SlopeTime = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][TimeIndexArray[index]] - CorrelationTuple[CPIndex-1][TimeIndexArray[index]])
+		elif(CPIndex+1 < len(CPArray)):	
+			SlopeSpace = (float(1)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex][0])
+			SlopeTime = (float(1)/dX)*(CorrelationTuple[CPIndex+1][TimeIndexArray[index]] - CorrelationTuple[CPIndex][TimeIndexArray[index]])
+		else:
+			SlopeSpace = (float(1)/dX)*(CorrelationTuple[CPIndex][0] - CorrelationTuple[CPIndex-1][0])
+			SlopeTime = (float(1)/dX)*(CorrelationTuple[CPIndex][TimeIndexArray[index]] - CorrelationTuple[CPIndex-1][TimeIndexArray[index]])
+
+		#SlopeSpace = float(0.0)
+		TimeCost = CPDiffVals[index+1]*CPDiffVals[index]*(CorrelationTuple[CPIndex][TimeIndexArray[index]] + SlopeTime*(TempCPVals[index+1] - CPArray[CPIndex]))
+		#TimeCost = 0.0
+		SpatialCost = SpatialCost + TimeCost + 0.5*CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SlopeSpace*(TempCPVals[index+1] - CPArray[CPIndex]))
+
+	return (SpatialCost + BoundaryCost)
+
+
 
 def SpatialCostFunctionInfinite(CPDiffVals, CPStart, TimeIndexArray, CPArray, CorrelationTuple):
 
@@ -167,8 +204,9 @@ def CostFunction_Total(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, Co
 	TemporalCost = 0
 	SpatialCost = 0
 	
-	BoundaryCost = CPDiffVals[0]*CPDiffVals[0]*CorrelationTuple[0][0]
+	#BoundaryCost = CPDiffVals[0]*CPDiffVals[0]*CorrelationTuple[0][0]
 	#BoundaryCost = InputTuple[NumTimeAlloc]*InputTuple[NumTimeAlloc]*CorrelationTuple[0][0]
+
 
 	for index in range(len(CPDiffVals)-1):
 
@@ -190,8 +228,8 @@ def CostFunction_Total(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, Co
 
 		TimeSlope = (float(1)/dT)*(CorrelationTuple[CPIndex][TimeIndex+1] - CorrelationTuple[CPIndex][TimeIndex])
 
-		TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex]) + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
-		SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(TempCPVals[index+1] - CPArray[CPIndex]))
+		TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex]))# + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
+		#SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(TempCPVals[index+1] - CPArray[CPIndex]))
 
 		#TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(InputTuple[index] - TimeArray[CPIndex]) + SpaceSlope*(InputTuple[NumTimeAlloc+index+1] - CPArray[CPIndex]))
 		#SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(InputTuple[NumTimeAlloc+index+1] - CPArray[CPIndex]))
@@ -345,7 +383,8 @@ def Driver_PreRead_Brute(Iterations,NumCPVals,TotalTime,CPVals,LagTime,Correlati
 		SpaceParameter_Tuple = (CPStart, TimeIndex_Tuple, CP_Tuple, CorrelationArray_Tuple)
 
 		#if index!=0:
-		OptimalResult = scipy.optimize.minimize(SpatialCostFunctionInfinite, CPDiff_Tuple, args=SpaceParameter_Tuple, method="SLSQP", bounds=Bnds_Space, constraints=Cons_Space, options={'ftol':1e-07})
+		#OptimalResult = scipy.optimize.minimize(SpatialCostFunctionInfinite, CPDiff_Tuple, args=SpaceParameter_Tuple, method="SLSQP", bounds=Bnds_Space, constraints=Cons_Space, options={'ftol':1e-07})
+		OptimalResult = scipy.optimize.minimize(SpatialCostFunction_Revised, CPDiff_Tuple, args=SpaceParameter_Tuple, method="SLSQP", bounds=Bnds_Space, constraints=Cons_Space, options={'ftol':1e-07})
 
 		CostTracker.append(OptimalResult.fun)
 
@@ -395,11 +434,16 @@ def Driver_PreRead_Brute(Iterations,NumCPVals,TotalTime,CPVals,LagTime,Correlati
 	NaiveCPAlloc.append(1)
 	NaiveCPAlloc.insert(0,-1)
 
+	OptimalTime.append(100)
+	OptimalTime.insert(0,100)
+	NaiveTimeAlloc.append(100)
+	NaiveTimeAlloc.insert(0,100)
+
 	return OptimalCP, OptimalTime, NaiveCPAlloc, NaiveTimeAlloc, CostTracker
 
 
 
-def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteControl/LinkedCode_CPP/Equilibrium_FromCluster/CorrelationMesh_15_15/",
+def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteControl/LinkedCode_CPP/Equilibrium_FromCluster/CorrelationMesh_9_15/",
 		   Filename_CorrArray="CorrelationMesh_2.dat",
 		   Filename_CP="CPVals_2.dat",
 		   Filename_LagTime="LagTime_2.dat"):
@@ -408,7 +452,26 @@ def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteCont
 	LagTime = ReadVector(ReadPath,Filename_LagTime)
 	CorrelationMesh = ReadCorrelationArray(ReadPath,Filename_CorrArray)
 
-	OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime = Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh)
+	#OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime = Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh)
+	OptimalCP,OptimalTime,NaiveCP,NaiveTime,Cost = Driver_PreRead_Brute(5,NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh)
+
+	#plt.plot(OptimalResultTime)
+	#plt.show()
+	#plt.close()
+
+	#sns.set(style='darkgrid',palette='muted',color_codes=True)
+
+	plt.plot(OptimalCP,OptimalTime,'b--',linewidth=2.0)
+	plt.plot(NaiveCP,NaiveTime,'k--',linewidth=2.0)
+	plt.plot(OptimalCP,NaiveTime,'g--',linewidth=2.0)
+	plt.plot(NaiveCP,OptimalTime,'r--',linewidth=2.0)
+	plt.plot(OptimalCP,OptimalTime,'bo')
+	plt.plot(NaiveCP,NaiveTime,'ko')
+	plt.plot(OptimalCP,NaiveTime,'go')
+	plt.plot(NaiveCP,OptimalTime,'ro')
+
+	plt.show()
+	plt.close()
 
 	#plt.plot(OptimalResultSpace)
 	#plt.show()
@@ -418,8 +481,8 @@ def Driver(NumCPVals,TotalTime,ReadPath="/Users/stevelarge/Research/DiscreteCont
 	#plt.show()
 	#plt.close()
 
-	return OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime
-
+	#return OptimalResult,OptimalResultSpace,OptimalResultTime,NaiveCP,NaiveTime
+	return OptimalCP,OptimalTime,NaiveCP,NaiveTime
 
 def Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh): 			
 	
@@ -493,7 +556,7 @@ def Driver_PreRead(NumCPVals,TotalTime,CPVals,LagTime,CorrelationMesh):
 	#OBJECTIVE FUNCTION MUST RETURN A SCALAR ERROR
 	#FIXED, sort of, the optimization does not appear to be optimizing with respect to time
 
-	OptimalResult = scipy.optimize.minimize(CostFunction_Total, Input_Tuple, args=Parameter_Tuple, method="SLSQP", bounds=Bnds, constraints=Cons, options={'ftol':1e-11})
+	OptimalResult = scipy.optimize.minimize(CostFunction_Total, Input_Tuple, args=Parameter_Tuple, method="SLSQP", bounds=Bnds, constraints=Cons, options={'ftol':1e-9})
 
 	OptimalResult_Time = OptimalResult.x[0:NumTimeAlloc]
 	OptimalResult_Space = OptimalResult.x[NumTimeAlloc:len(OptimalResult.x)]
