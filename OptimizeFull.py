@@ -167,16 +167,16 @@ def CostFunction_Total(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, Co
 	TemporalCost = 0
 	SpatialCost = 0
 	
-	#BoundaryCost = CPDiffVals[0]*CPDiffVals[0]*CorrelationTuple[0][0]
-	BoundaryCost = InputTuple[NumTimeAlloc]*InputTuple[NumTimeAlloc]*CorrelationTuple[0][0]
+	BoundaryCost = CPDiffVals[0]*CPDiffVals[0]*CorrelationTuple[0][0]
+	#BoundaryCost = InputTuple[NumTimeAlloc]*InputTuple[NumTimeAlloc]*CorrelationTuple[0][0]
 
 	for index in range(len(CPDiffVals)-1):
 
-		#TimeIndex = FindIndex(TimeArray,TimeVals[index])
-		#CPIndex = FindIndex(CPArray,TempCPVals[index+1])
+		TimeIndex = FindIndex(TimeArray,TimeVals[index])
+		CPIndex = FindIndex(CPArray,TempCPVals[index+1])
 
-		TimeIndex = FindIndex(TimeArray,InputTuple[index])
-		CPIndex = FindIndex(CPArray,InputTuple[NumTimeAlloc+index+1])
+		#TimeIndex = FindIndex(TimeArray,InputTuple[index])
+		#CPIndex = FindIndex(CPArray,InputTuple[NumTimeAlloc+index+1])
 
 		if(CPIndex < len(CPArray) & CPIndex > 0):
 			SpaceSlopeZero = (float(0.5)/dX)*(CorrelationTuple[CPIndex+1][0] - CorrelationTuple[CPIndex-1][0])
@@ -190,14 +190,14 @@ def CostFunction_Total(InputTuple, CPStart, NumTimeAlloc, TimeArray, CPArray, Co
 
 		TimeSlope = (float(1)/dT)*(CorrelationTuple[CPIndex][TimeIndex+1] - CorrelationTuple[CPIndex][TimeIndex])
 
-		#TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex]) + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
-		#SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(TempCPVals[index+1] - CPArray[CPIndex]))
+		TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(TimeVals[index] - TimeArray[CPIndex]) + SpaceSlope*(TempCPVals[index+1] - CPArray[CPIndex]))
+		SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(TempCPVals[index+1] - CPArray[CPIndex]))
 
 		#TemporalCost = TemporalCost + CPDiffVals[index]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(InputTuple[index] - TimeArray[CPIndex]) + SpaceSlope*(InputTuple[NumTimeAlloc+index+1] - CPArray[CPIndex]))
 		#SpatialCost = SpatialCost + CPDiffVals[index+1]*CPDiffVals[index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(InputTuple[NumTimeAlloc+index+1] - CPArray[CPIndex]))
 
-		TemporalCost = TemporalCost + InputTuple[NumTimeAlloc+index]*InputTuple[NumTimeAlloc+index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(InputTuple[index] - TimeArray[CPIndex]) + SpaceSlope*(InputTuple[NumTimeAlloc+index+1] - CPArray[CPIndex]))
-		SpatialCost = SpatialCost + InputTuple[NumTimeAlloc+index+1]*InputTuple[NumTimeAlloc+index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(InputTuple[NumTimeAlloc+index+1] - CPArray[CPIndex]))
+		#TemporalCost = TemporalCost + InputTuple[NumTimeAlloc+index]*InputTuple[NumTimeAlloc+index+1]*(CorrelationTuple[CPIndex][TimeIndex] + TimeSlope*(InputTuple[index] - TimeArray[CPIndex]) + SpaceSlope*(InputTuple[NumTimeAlloc+index+1] - CPArray[CPIndex]))
+		#SpatialCost = SpatialCost + InputTuple[NumTimeAlloc+index+1]*InputTuple[NumTimeAlloc+index+1]*(CorrelationTuple[CPIndex][0] + SpaceSlopeZero*(InputTuple[NumTimeAlloc+index+1] - CPArray[CPIndex]))
 
 
 	TotalCost = BoundaryCost + SpatialCost + TemporalCost
